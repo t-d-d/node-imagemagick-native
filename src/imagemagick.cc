@@ -189,7 +189,7 @@ Handle<Value> Convert(const Arguments& args) {
                 // JPEG background becomes black if set transparent here
                 transparent.alpha( 1. );
             }
-            image.extent( cropGeometry, transparent );
+            image.extent( cropGeometry/*, transparent */); // t-d-d
         }
         else if ( strcmp ( resizeStyle, "aspectfit" ) == 0 ) {
             // keep aspect ratio, get the maximum image which fits inside specified size
@@ -285,7 +285,8 @@ Handle<Value> Identify(const Arguments& args) {
     catch (std::exception& err) {
         std::string message = "image.read failed with error: ";
         message            += err.what();
-        return THROW_ERROR_EXCEPTION(message.c_str());
+        out->Set(String::NewSymbol("error"), String::New(message.c_str())); // t-d-d
+//        return THROW_ERROR_EXCEPTION(message.c_str()); // t-d-d
     }
     catch (...) {
         return THROW_ERROR_EXCEPTION("unhandled error");
