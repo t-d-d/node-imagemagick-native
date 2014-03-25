@@ -296,7 +296,7 @@ Handle<Value> Identify(const Arguments& args) {
 
     if (debug) printf("original width,height: %d, %d\n", (int) image.columns(), (int) image.rows());
 
-    Handle<Object> out = Object::New(); // t-d-d
+//    Handle<Object> out = Object::New(); // t-d-d
 
     out->Set(String::NewSymbol("width"), Integer::New(image.columns()));
     out->Set(String::NewSymbol("height"), Integer::New(image.rows()));
