@@ -189,7 +189,7 @@ Handle<Value> Convert(const Arguments& args) {
                 // JPEG background becomes black if set transparent here
                 transparent.alpha( 1. );
             }
-            image.extent( cropGeometry, transparent );
+            image.extent( cropGeometry/*, transparent */); // t-d-d
         }
         else if ( strcmp ( resizeStyle, "aspectfit" ) == 0 ) {
             // keep aspect ratio, get the maximum image which fits inside specified size
@@ -276,6 +276,8 @@ Handle<Value> Identify(const Arguments& args) {
     int debug = obj->Get( String::NewSymbol("debug") )->Uint32Value();
     if (debug) printf( "debug: on\n" );
 
+    Handle<Object> out = Object::New(); // t-d-d
+
     Magick::Blob srcBlob( node::Buffer::Data(srcData), node::Buffer::Length(srcData) );
 
     Magick::Image image;
@@ -285,7 +287,8 @@ Handle<Value> Identify(const Arguments& args) {
     catch (std::exception& err) {
         std::string message = "image.read failed with error: ";
         message            += err.what();
-        return THROW_ERROR_EXCEPTION(message.c_str());
+        out->Set(String::NewSymbol("error"), String::New(message.c_str())); // t-d-d
+//        return THROW_ERROR_EXCEPTION(message.c_str()); // t-d-d
     }
     catch (...) {
         return THROW_ERROR_EXCEPTION("unhandled error");
@@ -293,7 +296,7 @@ Handle<Value> Identify(const Arguments& args) {
 
     if (debug) printf("original width,height: %d, %d\n", (int) image.columns(), (int) image.rows());
 
-    Handle<Object> out = Object::New();
+    Handle<Object> out = Object::New(); // t-d-d
 
     out->Set(String::NewSymbol("width"), Integer::New(image.columns()));
     out->Set(String::NewSymbol("height"), Integer::New(image.rows()));
